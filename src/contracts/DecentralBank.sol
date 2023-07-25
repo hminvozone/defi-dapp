@@ -10,9 +10,9 @@ contract DecentralBank {
     Tether public tether;
     address[] public stakers;
 
-    mapping(address => uint256) stakeBalance;
-    mapping(address => bool) hasStaked;
-    mapping(address => bool) isStaking;
+    mapping(address => uint256) public stakeBalance;
+    mapping(address => bool) public hasStaked;
+    mapping(address => bool) public isStaking;
 
     constructor(RWD _rwd, Tether _tether) public {
         rwd = _rwd;
@@ -23,6 +23,10 @@ contract DecentralBank {
     function depositTokens(uint256 amount) public {
         require(amount > 0, "amount cannot be 0");
 
+        // transfer tether tokens to this contract address for staking
+        tether.transferFrom(msg.sender, address(this), amount);
+
+        // update staking balance
         stakeBalance[msg.sender] = stakeBalance[msg.sender] + amount;
 
         if (!hasStaked[msg.sender]) {
@@ -31,10 +35,6 @@ contract DecentralBank {
 
         hasStaked[msg.sender] = true;
         isStaking[msg.sender] = true;
-    }
-
-    function getIsStaking(address from) public view returns (bool) {
-        return isStaking[from];
     }
 
     // issue rewards

@@ -3,8 +3,8 @@ pragma solidity ^0.5.0;
 contract RWD {
     string public name = 'Reward Token';
     string public symbol = 'RWD';
-    uint256 public totalSupply = 1000000000000000000;
-    uint8 public decimals = 18;
+    uint256 public totalSupply = 1000000000000000000000000;
+    uint8 public decimals = 20;
 
     event Transfer(
         address indexed from,
@@ -18,7 +18,7 @@ contract RWD {
         uint256 value
     );
 
-    mapping(address => uint256) balanceOf;
+    mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) allowance;
 
     modifier checkIfAmountCanTransfer(address from, uint256 amount) {
@@ -57,10 +57,6 @@ contract RWD {
         emit Transfer(from, to, value);
 
         return true;
-    }
-
-    function getBalance(address from) public view returns (uint256) {
-        return balanceOf[from];
     }
 }
 
